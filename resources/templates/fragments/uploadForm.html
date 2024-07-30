@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+  <body>
+    <div th:fragment="uploadForm">
+		<div class="mb-3">
+			<label for="file" class="form-label">Load CSV Data File</label>
+			<input class="form-control" type="file" id="file" name="file">
+		</div>
+        
+        <div th:if="${message != null}" class="alert alert-secondary alert-dismissible fade show text-center message mt-3" role="alert">
+  			[[${message}]]
+	    	<button type="button" class="close btn-sm" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">×</span>
+    		</button>
+		</div>
+	</div>
+  </body>
+</html>

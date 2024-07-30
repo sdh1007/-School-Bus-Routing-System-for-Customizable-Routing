@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+  	<body>
+  	
+		<div id="heading">		
+			<h1>Hello [[${#request.userPrincipal.principal.fullName}]], welcome to the<br>School Management System</h1>
+			
+			<a th:fragment="logout" th:href="@{/logout}" id="logout" class="iconLink">
+   			<img src="/imgs/logoffButton.png" id="logoutIcon"/>
+    		<span>Logout</span>
+			</a>
+			
+		</div>		
+    </body>
+</html>

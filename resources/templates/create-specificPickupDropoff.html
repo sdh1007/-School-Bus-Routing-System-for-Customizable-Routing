@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Create Pickup/Dropoff Point</title>
+	<style>
+		#map{
+			height: 600px;
+			width: 100%;
+		}
+		.routeInfoWindow {
+			display: flex;
+			flex-flow: row wrap;
+			justify-content: flex-start;
+			color: black;
+		}
+		.routeInfoWindow .fa-walking {
+  			color: #ec9a29;
+  			margin-right: 5px;
+		}
+		.routeInfoWindow div {
+  			display: flex;
+   		 	align-items: center;
+   		 	width: 100%;
+   		 	font-weight: bold;
+		}
+	</style>
+	
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+	<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+	<div th:replace="fragments/menu :: menu">...</div>
+		
+    <div id="wrapper">
+
+		<div id="heading">
+			<h1>Create a Pickup or Dropoff Point For Route</h1>
+		</div>
+		
+		<form action="#" th:action="@{/addPickupDropoff/{routeId}(routeId=${routeId})}" method="post" th:object="${pickupDropoff}" class="createForm">
+			<div class="form-group">
+				<label for="pickupDropoffName">Pickup/Dropoff Name:</label>
+				<input type="text" class="form-control" id="pickupDropoffName" name="pickupDropoffName" th:field="*{pickupDropoffName}" placeholder="Enter a name" required>
+			</div>
+			
+			<div class="form-group">
+				<label for="days">Choose a Day</label>
+				<select id="days" name="days" class="form-control" required>
+					<option value="" selected disabled>Select a Day</option>
+					<option value="all">All Days</option>
+					<option value="monday">Monday</option>
+					<option value="tuesday">Tuesday</option>
+					<option value="wednesday">Wednesday</option>
+					<option value="thursday">Thursday</option>
+					<option value="friday">Friday</option>
+				</select>
+			</div>
+						
+			<div class="form-group">
+				<h4 class="text-center">Attending Students</h4>
+				<div class="list-group" id="studentList">
+				</div>
+			</div>
+			
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="latitude">Pickup/Dropoff Latitude:</label>
+				    <input type="text" class="form-control" id="latitude" name="latitude" readonly required>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="longitude">Pickup/Dropoff Longitude:</label>
+				    <input type="text" class="form-control" id="longitude" name="longitude" readonly required>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="roadName">Road Name:</label>
+			    <input type="text" class="form-control" id="roadName" name="roadName" readonly required>
+			</div>
+			
+			<input type="submit" class="btn btn-primary" value="Add Pickup/Dropoff Point">
+			<input type="button" class="btn btn-danger"  onclick="clearPage();" value="Reset"/>
+		    <input type="button" class="btn btn-secondary"  onclick="location.href='/pickupDropoffs';" value="Cancel"/>
+		    
+		    <div class="notes">
+		    	Notes
+		    	<ul>
+		    		<li><span style="color: red;">Red</span> students are already assigned a pickup/dropoff point and will be reassigned if selected.</li>
+		    		<li>Hover over pin to see the name and address of the student.</li>
+		    		<li>Click on a student's walk path to see their expected walk distance and time</li>
+		    	</ul>
+		    </div>
+		</form>
+	</div>
+	
+	<div id="map"></div>
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD390VrMYSzUckUBYiWeXy2ZvVDrNtWUPg&libraries=marker&v=beta&result_type=street_address&&callback=initMap"></script>
+	<script type="text/javascript" th:inline="javascript">
+		var geocoder;
+		var stopMarker;
+		var gmarkers = [];
+		var routes = [];
+		var routeInfoWindows = [];
+	
+		var schools = /*[[${group.selectSchools}]]*/ '';
+		var student = /*[[${student}]]*/ '';
+		
+		function loadStudents() {
+			$(schools).each(function() { // Loop through all schools of the group
+				$(this.student).each(function() { // Loop through all students of school
+					var addr = this.address1;
+					var cty = this.city;
+					var sta = this.state;
+					var zp = this.zipCode;
+					var studentId = this.studentId;
+					var studentName = this.firstName + " " + this.lastName;
+					var studentInput;
+					
+					if(studentId == student.studentId) {
+						studentInput = $('<input type="checkbox" name="checkboxStudents" checked>').addClass("form-check-input me-1").val(studentId);
+						addMarker(addr, cty, sta, zp, studentId, studentName);
+					} else {
+						studentInput = $('<input type="checkbox" name="checkboxStudents">').addClass("form-check-input me-1").val(studentId);
+					}
+					
+					studentInput.on('change', function(){ // Add listener to each checkbox to add/remove point
+						if(this.checked) { 
+							addMarker(addr, cty, sta, zp, studentId, studentName);
+						}
+						else {
+							deleteMarker(studentId);
+							if(routes.length > 0) {
+								deleteRoute(studentId);
+								deleteRouteInfoWindow(studentId);
+							}
+						}
+					});
+					
+					var studentLabel = $("<label></label").addClass("list-group-item").append(studentInput);
+					studentLabel.append(this.firstName + " " + this.lastName + " #"+this.studId+" (School: "+this.school.schoolName+ ", grade: "+this.grade+")");
+					
+					$("#studentList").append(studentLabel);
+					
+					if (this.pickupDropoff != null) {
+						studentLabel.addClass("alreadyAssigned");
+					}
+				});
+			});
+		}
+		
+		$("form").submit(function(e) {
+			// Check needed because required attribute doesn't work on read-only inputs
+			if($("#roadName").val() == "") {
+				e.preventDefault();
+				window.alert("No Pickup/Dropoff point selected, please choose a point on the map.");
+			}
+		});
+		
+		//This is the function used to create the options for the google map
+		function initMap(){
+			geocoder = new google.maps.Geocoder();
+			const infowindow = new google.maps.InfoWindow();
+			
+			var options = {
+				zoom: 7,
+				center: {lat: 40.7033 , lng: -77.5945 },
+				streetViewControl: false,
+				mapId: "4504f8b37365c3d0",
+				draggableCursor: 'crosshair',
+			}
+			
+			//Creates a new map to display on the webpage
+			map = new google.maps.Map(document.getElementById("map"), options)
+			
+			// Adds listener for click on map to add a stopMarker
+			map.addListener("click", (e) => {
+				geocodeLatLng(geocoder, map, e.latLng); // Fills roadname from grabbed lat/lng
+			    placeMarkerAndPanTo(e.latLng, map); // Places point and changes view of map
+			    
+			    if(gmarkers.length > 0) {
+				    gmarkers.forEach((currentMarker) => { // Create routes for every student to the selected point
+				    	calcRoute(currentMarker.position, currentMarker.id);
+				    });
+			    }
+			});
+			
+			loadStudents();
+		};
+		
+		// Calculates the route for each student point
+		function calcRoute(startPoint, id) {		
+			var dottedLineSymbol = {
+				    path: google.maps.SymbolPath.CIRCLE,
+				    fillOpacity: 1,
+				    scale: 3
+			};
+			var polylineDotted = new google.maps.Polyline({
+			    strokeColor: '#0eb7f6',
+			    strokeOpacity: 0,
+			    fillOpacity: 0,
+			    icons: [{
+			        icon: dottedLineSymbol,
+			        offset: '0',
+			        repeat: '10px'
+			    }],
+			});
+			
+			var directionsService = new google.maps.DirectionsService();
+			var directionsRenderer = new google.maps.DirectionsRenderer({ // Set route options
+				map,
+				suppressMarkers: true, 
+				polylineOptions: polylineDotted,
+				id: id,
+			});
+						
+		  	var request = {
+			    origin: startPoint,
+			    destination: stopMarker.position,
+			    travelMode: 'WALKING'
+		  	};
+		 	directionsService.route(request, function(result, status) {
+		    	if (status == 'OK') {
+		      		directionsRenderer.setDirections(result);
+		      		
+		      		//var step = Math.floor(result.routes[0].legs[0].steps.length / 2); // Used to put the infowindow in the middle of the route
+		      		
+		      		var contentString = 
+		      			'<div class="routeInfoWindow">' +
+		      				'<div>' +
+		      					'<i class="fas fa-walking" style="font-size:24px"></i>' +
+			      				'<strong>' + result.routes[0].legs[0].duration.text + '</strong><br>' +
+			      			'</div>' +
+			      			'<i>' + result.routes[0].legs[0].distance.text + '</i>' +
+		      			'</div>';
+		      		
+		      		var infowindow = new google.maps.InfoWindow({
+					    content: contentString,
+					    position: startPoint /*result.routes[0].legs[0].steps[step].end_location*/, // Position might need adjusted
+					    ariaLabel: "Route walk time and distance",
+					    id: id,
+					});
+		      		
+		      		polylineDotted.addListener("click", () => {
+		      			infowindow.open(map);
+		      		});
+		      		
+		      		routeInfoWindows.push(infowindow)
+		      		routes.push(directionsRenderer);
+		  		}
+		    	else {
+		    		window.alert("Error finding a route, please try again. Error: " + status);
+		    	}
+		  	});
+		}
+		
+		// Place stopMarker for pickup/dropoff point and set lat/lng
+		function placeMarkerAndPanTo(latLng, map) {
+			if (stopMarker == null) { // Create the point marker
+				const pinViewVisuals = new google.maps.marker.PinView({
+				    background: "#FBBC04",
+				    glyphColor: "#143642",
+				    borderColor: "#143642",
+				});
+				
+				stopMarker = new google.maps.marker.AdvancedMarkerView({
+					map,
+					position: latLng,
+					content: pinViewVisuals.element,
+					draggable: true,
+				});
+				
+				stopMarker.addListener("dragend", (event) => {
+					const position = stopMarker.position;
+					geocodeLatLng(geocoder, map, event.latLng); // Fills roadname from grabbed lat/lng
+				    
+					if(routes.length > 0) { // Remove all routes if any exist at this point
+						clearAllRoutes();
+						clearAllRouteInfoWindows();
+			        }
+					
+				    if(gmarkers.length > 0) {
+					    gmarkers.forEach((currentMarker) => { // Create routes for every student to the selected point
+					    	calcRoute(currentMarker.position, currentMarker.id);
+					    });
+				    }
+				});
+				
+				map.panTo(latLng);
+		    } 
+		  	else { // Change the point marker
+		  		stopMarker.position = latLng;
+		  		
+				if(routes.length > 0) { // Remove all routes if any exist at this point
+					clearAllRoutes();
+					clearAllRouteInfoWindows();
+		        }
+			} 
+
+			document.getElementById("latitude").value = latLng.lat();
+			document.getElementById("longitude").value = latLng.lng();
+		  	map.panTo(latLng);
+		}
+			
+		// Adds a student marker with the given address & student name
+		function addMarker(addr, cty, sta, zp, id, studentName) {
+			var location = addr+" "+cty+" "+sta+" "+zp;
+						
+			geocoder.geocode({address: location}, function(results){
+				var lat1 = results[0].geometry.location.lat();
+				var lng1 = results[0].geometry.location.lng();
+	
+				const marker = new google.maps.Marker({  
+					id: id,
+					position: results[0].geometry.location, 
+					map: map, 
+					title: studentName + " (" + addr + ")",
+				})
+				
+				if(stopMarker != null) {
+					calcRoute(marker.position, marker.id);
+				}
+
+				gmarkers.push(marker);
+				map.setCenter(new google.maps.LatLng(lat1, lng1));
+				map.setZoom(10);
+			});
+		};
+	    
+	 	// Create points when given lat/lng
+		function geocodeLatLng(geocoder, map, latlng) {
+			var streetName;
+	 		geocoder
+		    .geocode({ location: latlng })
+		    .then((response) => {
+		    	
+		    	for (var i = 0; i < response.results.length; i++) { 
+		    		result = response.results[i]; // Set variable so you can access the result within the if
+		  			
+		  			// Check which type the result is in decending order of importance
+		  			if(result.types[0] == "street_address") {
+		  				streetName = result.address_components[0].short_name + " " + result.address_components[1].short_name;
+		  				break;
+		  			}
+		  			else if(result.types[0] == "route") {
+		  				streetName = result.address_components[0].short_name;
+		  				break;
+		  			}
+					else if(result.types[0] == "premise") {
+						streetName = result.address_components[0].short_name + " " + result.address_components[1].short_name;
+						break;
+		  			}
+		    	}
+		  		if(streetName == null || streetName == "Unnamed Road") {
+		  			window.alert("No address found for point, please choose another.");
+		  		} else {
+		  			$("#roadName").val(streetName);
+		  		}
+		    })
+		    .catch((e) => window.alert("Geocoder failed due to: " + e));
+	 	}
+	 	
+		var deleteMarker = function(id) {			
+			var marker = gmarkers.find(item => item.id == id);// find the marker by given id
+						
+		    marker.setMap(null); // Remove marker from map
+			gmarkers = gmarkers.filter(marker => marker.id != id); // Remove marker from list of markers
+		}
+		
+		var deleteRoute = function(id) {			
+			var route = routes.find(route => route.id == id); // find the route by given id
+						
+			route.setMap(null); // Remove route from map
+			routes = routes.filter(route => route.id != id); // Remove route from list of routes
+		}
+		
+		var deleteRouteInfoWindow = function(id) {			
+			var routeInfoWindow = routeInfoWindows.find(routeInfoWindow => routeInfoWindow.id == id); // find the infoWindow by given id
+						
+			routeInfoWindow.close(); // If the infoWindow is open, close it before deleting it
+			routeInfoWindow.setMap(null); // Remove infoWindow from map
+			routeInfoWindows = routeInfoWindows.filter(routeInfoWindow => routeInfoWindow.id != id); // Remove infoWindow from list of infoWindows
+		}
+		
+		// Deletes all markers
+		function clearAllMarkers() {						
+	        for (var i = 0; i < gmarkers.length; i++) {	        	
+	        	gmarkers[i].setMap(null);
+	        }
+	        gmarkers = [];
+	        
+	        if(stopMarker != null) {
+	        	stopMarker.map = null;
+				stopMarker = null;
+				
+				document.getElementById('latitude').value = "";
+				document.getElementById('longitude').value = "";
+				document.getElementById('roadName').value = "";
+	        }
+	    }
+		
+		// Deletes all routes
+		function clearAllRoutes() {
+			for (var i = 0; i < routes.length; i++) {
+				routes[i].setMap(null);
+			}
+			
+			routes = [];
+		}
+		
+		// Deletes all routeInfoWindows
+		function clearAllRouteInfoWindows() {
+			for (var i = 0; i < routeInfoWindows.length; i++) {
+	        	routeInfoWindows[i].setMap(null);
+	        }
+			
+			routeInfoWindows = [];
+		}
+		
+		// Clears all map indicators
+		function clearMap() {
+			clearAllMarkers();
+			clearAllRoutes();
+	        clearAllRouteInfoWindows();
+		}
+		
+		// Clears form & map
+		function clearPage() {
+			$(".createForm")[0].reset();
+			
+			$("#studentList").empty().append('<label class="list-group-item">Choose a school to view students</label>');
+			
+			
+			clearAllMarkers();
+			clearAllRoutes();
+	        clearAllRouteInfoWindows();
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!-- 
+default webpage for whenever something goes wrong
+on the website, this webpage will apear. User can
+go back to the previous webpage they were coming from.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Error Page</title>
+	<style type="text/css">
+		body{
+			background-color: #143642;
+			font-family: Arial, sans-serif;
+			text-align: center;
+			padding-top: 100px;
+		}
+		h1{
+			color: #0F8B8D;
+			font-size: 60px;
+			margin-bottom: 50px;
+		}
+		p{
+			color: #455A64;
+			font-size: 24px;
+			margin-bottom: 30px;
+		}
+		.btn{
+			background-color: #0F8B8D;
+			color: #FFFFFF;
+			font-size: 20px;
+			padding: 10px 20px;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+			transition: background-color 0.5s;
+		}
+		.btn:hover{
+			background-color: black;
+		}
+	</style>
+</head>
+<body>
+	<h1>Oops! Something Went Wrong</h1>
+	<p>We apologize for the inconvenience. Please go back to the previous page.</p>
+	<button class="btn" onclick="history.back()">Go Back</button>
+</body>
+</html>
+

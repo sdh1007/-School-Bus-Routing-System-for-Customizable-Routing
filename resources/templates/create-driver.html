@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Create Driver</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+	<div th:replace="fragments/menu :: menu">...</div>
+
+	<div id="wrapper">
+		<div id="heading">
+			<h1>Add Driver</h1>
+		</div>
+		
+		<form th:action="@{/uploadDriver}" method="post" id="uploadForm" class="createForm" enctype="multipart/form-data">
+			<div th:replace="fragments/uploadForm :: uploadForm">...</div>
+			
+            <div>
+			    <button type="submit" class="btn btn-primary" onclick="uploadFile()">Upload</button>
+			    <input type="button" class="btn btn-secondary" onclick="location.href='/driver';" value="Go Back"/>
+			    <progress id="progressBar" value="0" max="100" style="display:none;"></progress>
+			</div>
+	  	</form>
+		
+		<form action="#" th:action="@{/addDriver}" th:object="${drivers}" method="post" class="createForm">
+		    <div th:replace="fragments/addEditPages :: driver">...</div>
+		
+		    <input type="submit" class="btn btn-primary" value="Add Driver">
+		    <input type="button" class="btn btn-secondary" onclick="location.href='/driver';" value="Cancel"/>   
+		</form>
+</div>	
+</script>
+	<script>
+    function uploadFile() {
+        var progressBar = document.getElementById("progressBar");
+        progressBar.style.display = "block";
+        
+        var xhr = new XMLHttpRequest();
+        xhr.upload.onprogress = function(event) {
+            if (event.lengthComputable) {
+                var percentComplete = (event.loaded / event.total) * 100;
+                progressBar.value = percentComplete;
+            }
+        };
+        
+        xhr.open("POST", "/upload", true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // handle response
+            }
+        };
+        
+        xhr.send(new FormData(document.getElementById("uploadForm")));
+    }
+</script>
+		
+</body>
+</html>

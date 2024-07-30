@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+  <body>
+    <div th:fragment="routeForm">
+		<div id="routeTop" class="mx-auto">
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="routeName">Route Name</label>
+					<input type="text" th:field="*{routeName}" id="routeName" class="form-control" placeholder="Route Name" required>
+					<span th:if="${#fields.hasErrors('routeName')}" th:errors="*{routeName}"></span>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="group">Group</label>
+					<select id="group" name="group" class="form-control" th:object="${groups}" required>
+						<option value="" selected disabled>Select a Group</option>
+						<option th:each="group : ${groups}" th:text="${group.groupName}" th:value="${group.groupId}" th:selected="${group.groupId == routing?.group?.groupId}"></option>
+					</select>
+				</div>
+			</div>
+			
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="vehicle">Vehicle</label>
+					<select id="vehicle" name="vehicle" class="form-control" th:object="${vehicles}">
+						<option value="" selected disabled>Select a Vehicle</option>
+						<option th:each="vehicle : ${vehicles}" th:text="${vehicle.vehicleCode} + ' (' + ${vehicle.seatNumber} + ' seats)'" th:value="${vehicle.id}" th:selected="${vehicle.id == routing?.vehicle?.id}"></option>
+					</select>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="driver">Driver</label>
+					<select id="driver" name="driver" class="form-control" th:object="${drivers}">
+						<option value="" selected disabled>Select a Driver</option>
+						<option th:each="driver : ${drivers}" th:text="${driver.name}" th:value="${driver.id}" th:selected="${driver.id == routing?.driver?.id}"></option>
+					</select>
+				</div>
+			</div>
+			
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="startingLocations">Starting Location</label>
+					<select id="startingLocations" name="startingLocations" class="form-control">
+						<option value="" selected disabled>Select a Location</option>
+					</select>
+					<input type="hidden" name="startingLocationType" id="startingLocationType">
+				</div>
+				<div class="form-group col-md-6">
+					<label for="endingLocations">Ending Location</label>
+					<select id="endingLocations" name="endingLocations" class="form-control">
+						<option value="" selected disabled>Select a Location</option>
+					</select>
+					<input type="hidden" name="endingLocationType" id="endingLocationType">
+				</div>
+			</div>
+			
+			<div class="form-row">
+				<div class="form-group col-md-2">
+					<label for="startHour">Start Hour</label>
+					<select th:field="*{startHour}" id="startHour" name="startHour" class="form-control">
+				  		<option value=1>1</option>
+				  		<option value=2>2</option>
+				  		<option value=3>3</option>
+				  		<option value=4>4</option>
+				  		<option value=5>5</option>
+				  		<option value=6>6</option>
+				  		<option value=7>7</option>
+				  		<option value=8>8</option>
+				  		<option value=9>9</option>
+				  		<option value=10>10</option>
+				  		<option value=11>11</option>
+				  		<option value=12>12</option>
+					</select>
+					<span th:if="${#fields.hasErrors('startHour')}" th:errors="*{startHour}"></span>
+				</div>
+				<div class="form-group col-md-2">
+					<label for="startMin">Start Minute</label>
+					<input type="number" th:field="*{startMin}" id="startMin" class="form-control" placeholder="00" min=0 max=59 oninput="validity.valid||(value='');">
+					<span th:if="${#fields.hasErrors('startMin')}" th:errors="*{startMin}"></span>
+				</div>
+				<div class="form-group col-md-2">
+					<label for="startAmPm">Start AM or PM</label>
+					<select th:field="*{startAmPm}" id="startAmPm" name="startAmPm" class="form-control">
+				  		<option value="AM">AM</option>
+				  		<option value="PM">PM</option>
+					</select>
+					<span th:if="${#fields.hasErrors('startAmPm')}" th:errors="*{startAmPm}"></span>
+				</div>
+				
+				<div class="form-group col-md-2">
+					<label for="endHour">End Hour</label>
+				    <input type="text" th:field="*{endHour}" id="endHour" name="endHour" class="form-control" readonly>
+				    <span th:if="${#fields.hasErrors('endHour')}" th:errors="*{endHour}"></span>
+				</div>
+				<div class="form-group col-md-2">
+					<label for="endMin">End Minute</label>
+				    <input type="number" th:field="*{endMin}" id="endMin" class="form-control" readonly placeholder="00" min=0 max=59 oninput="validity.valid||(value='');">
+				    <span th:if="${#fields.hasErrors('endMin')}" th:errors="*{endMin}"></span>
+				</div>
+				<div class="form-group col-md-2">
+					<label for="endAmPm">End AM or PM</label>
+				    <input type="text" th:field="*{endAmPm}" id="endAmPm" name="endAmPm" class="form-control" readonly>
+				    <span th:if="${#fields.hasErrors('endAmPm')}" th:errors="*{endAmPm}"></span>
+				</div>
+			</div>
+			
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="totalStudents">Total # of Students</label>
+					<input type="number" th:field="*{totalStudents}" id="totalStudents" class="form-control" readonly>
+					<span th:if="${#fields.hasErrors('totalStudents')}" th:errors="*{totalStudents}"></span>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="totalStops">Total # of Stops</label>
+					<input type="number" th:field="*{totalStops}" id="totalStops" class="form-control" readonly>
+					<span th:if="${#fields.hasErrors('totalStops')}" th:errors="*{totalStops}"></span>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-group col-md-3">
+					<label for="pickupTotalTravelTime">Pickup Travel Time</label>
+					<input type="text" id="pickupTotalTravelTime" class="form-control" th:field="*{pickupTotalTravelTime}" readonly>
+					<span th:if="${#fields.hasErrors('pickupTotalTravelTime')}" th:errors="*{pickupTotalTravelTime}"></span>
+				</div>
+				<div class="form-group col-md-3">
+					<label for="pickupTotalDistance">Pickup Travel Distance</label>
+					<input type="text" id="pickupTotalDistance" class="form-control" th:field="*{pickupTotalDistance}" readonly>
+					<span th:if="${#fields.hasErrors('pickupTotalDistance')}" th:errors="*{pickupTotalDistance}"></span>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="pickupTotalTravelTimeWithoutRiders">Time Without Students (pickup)</label>
+					<input type="text" id="pickupTotalTravelTimeWithoutRiders" class="form-control" th:field="*{pickupTotalTravelTimeWithoutRiders}" readonly>
+					<span th:if="${#fields.hasErrors('pickupTotalTravelTimeWithoutRiders')}" th:errors="*{pickupTotalTravelTimeWithoutRiders}"></span>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-group col-md-3">
+					<label for="dropoffTotalTravelTime">Dropoff Travel Time</label>
+					<input type="text" id="dropoffTotalTravelTime" class="form-control" th:field="*{dropoffTotalTravelTime}" readonly>
+					<span th:if="${#fields.hasErrors('dropoffTotalTravelTime')}" th:errors="*{dropoffTotalTravelTime}"></span>
+				</div>
+				<div class="form-group col-md-3">
+					<label for="dropoffTotalDistance">Dropoff Travel Distance</label>
+					<input type="text" id="dropoffTotalDistance" class="form-control" th:field="*{dropoffTotalDistance}" readonly>
+					<span th:if="${#fields.hasErrors('dropoffTotalDistance')}" th:errors="*{dropoffTotalDistance}"></span>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="dropoffTotalTravelTimeWithoutRiders">Time Without Students (dropoff)</label>
+					<input type="text" id="dropoffTotalTravelTimeWithoutRiders" class="form-control" th:field="*{dropoffTotalTravelTimeWithoutRiders}" readonly>
+					<span th:if="${#fields.hasErrors('dropoffTotalTravelTimeWithoutRiders')}" th:errors="*{dropoffTotalTravelTimeWithoutRiders}"></span>
+				</div>
+			</div>
+			<div class="form-group">
+				<h4 class="text-center">Unassigned Students</h4>
+				<div id="unassignedStudents" class="list-group">
+					<div class="form-row listHeadings">
+				  		<div class="form-group col-md-1">
+				  		</div>
+				  		<div class="form-group col-md-4">
+				  			<span>Name</span>
+				  		</div>
+				  		<div class="form-group col-md-3">
+				  			<span>School</span>
+				  		</div>
+				  		<div class="form-group col-md-2">
+				  			<span>Grade</span>
+				  		</div>
+				  		<div class="form-group col-md-2">
+				  			<span>P/D Point</span>
+				  		</div>
+				  	</div>
+					<label class="list-group-item default-item">Choose a group to list students</label>
+				</div>
+			</div>
+			
+			<div class="form-group arrows sideBySide">
+				<i id="deAssignArrow" class='far fa-caret-square-up' title="De-Assign Students"></i>
+				<i id="assignArrow" class='far fa-caret-square-down' title="Assign Students"></i>
+			</div>
+		</div>
+
+		<div class="form-row">
+			<div class="form-group col-md-5">
+				<h4 class="text-center">Assigned Pickup</h4>
+				<div id="pickupListbox" class="list-group">
+					<div class="form-row listHeadings">
+				  		<div class="form-group col-md-1">
+				  		</div>
+				  		<div class="form-group col-md-6">
+				  			<span>Student</span>
+				  		</div>
+				  		<div class="form-group col-md-3">
+				  			<span>PPoint</span>
+				  		</div>
+				  		<div class="form-group col-md-2">
+				  			<span>Time</span>
+				  		</div>
+				  	</div>
+				</div>
+			</div>
+			<div class="form-group col-md-1 arrows aboveBelow">
+				<i id="pickupUp" class='far fa-caret-square-up' title="Move Pickup Up"></i>
+				<i id="pickupDown" class='far fa-caret-square-down' title="Move Pickup Down"></i>
+			</div>
+			<div class="form-group col-md-1 arrows aboveBelow">
+				<i id="dropoffUp" class='far fa-caret-square-up' title="Move Dropoff Up"></i>
+				<i id="dropoffDown" class='far fa-caret-square-down' title="Move Dropoff Down"></i>
+			</div>
+			<div class="form-group col-md-5">
+				<h4 class="text-center">Assigned Dropoff</h4>
+				<div id="dropoffListbox" class="list-group">
+					<div class="form-row listHeadings">
+				  		<div class="form-group col-md-1">
+				  		</div>
+				  		<div class="form-group col-md-6">
+				  			<span>Student</span>
+				  		</div>
+				  		<div class="form-group col-md-3">
+				  			<span>DPoint</span>
+				  		</div>
+				  		<div class="form-group col-md-2">
+				  			<span>Time</span>
+				  		</div>
+				  	</div>
+				</div>
+			</div>
+		</div>
+	</div>
+  </body>
+</html>

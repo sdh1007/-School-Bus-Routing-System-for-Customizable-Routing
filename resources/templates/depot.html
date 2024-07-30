@@ -1,0 +1,88 @@
+<!Doctype html>
+<html xmlns:th="http://ww.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Depot Page</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="loaderr"></div>
+	<div th:replace="fragments/menu :: menu">...</div>
+
+    <div id="wrapper">
+		<div id="heading">		
+			<h1>Depots</h1>
+			
+		<!-- 	<a th:replace="fragments/heading :: logout"></a> -->
+		</div>
+		<div id="tableContainer">	
+			<table id="dataTable" class="display compact" style="width:100%;">
+				<thead>
+					<tr>
+						<th>Actions</th>
+						<th>Address</th>
+						<th>City</th>
+						<th>Depot Name</th>
+						<th>Road Name</th>
+						<th>ZipCode</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="depot : ${depots}">
+					 	<td>
+						 	<a th:href="@{/viewDepot/{id}(id=${depot.depotId})}">View</a>			
+							<div sec:authorize="hasAnyAuthority('Transportation_Manager')">
+						 		<a th:href="@{/editDepot/{id}(id=${depot.depotId})}">Edit</a>
+						 		<a href="#" th:id="${depot.depotId}" class="delete">Delete</a>
+							</div>
+							
+			   			</td>
+			   			
+					    <td th:text="${depot.address1}"></td> 
+					    <td th:text="${depot.city}"></td> 
+					    <td th:text="${depot.name}"></td> 
+					    <td th:text="${depot.roadName}"></td>
+					    <td th:text="${depot.zipCode}"></td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="tableButtonSpacing" sec:authorize="hasAnyAuthority('Transportation_Manager')">
+				<a href="/createDepot" class="button small">Add Depots</a>
+				<a href = "/exportDepot" class="button small">Export Table</a>
+			</div>
+		</div> <!-- closing tableContainer -->
+	</div>
+	<script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+	<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js" type="text/javascript"></script>
+	<script src="/js/dataTableScript.js" type="text/javascript"></script>
+	
+	<!-- Script to have a popup confirming the user wants to delete the item -->
+	<script type="text/javascript" th:inline="javascript">
+		var depots = /*[[${depots}]]*/ ''; // different object for each page
+		$( ".delete" ).click(function() 
+		{
+			confirmDelete($(this).attr("id"));
+		});
+	
+	    function confirmDelete(id) {
+	    	var selectedDepot = depots.find(item => item.depotId == id);
+	    	var deleteUrl = "/deleteDepot/" + selectedDepot.depotId;
+	    	
+	        if(confirm("Are you sure you want to delete " + selectedDepot.name + "?"))
+	        {
+	        	window.location.href = deleteUrl;
+	        }
+	    }
+	</script>
+	<script>
+		$(document).ready(function() {
+			$('.loaderr').show();
+			$(window).on('load', function() {
+				$('.loaderr').fadeOut('fast');
+			});
+		});
+</script>
+</body>
+</html>

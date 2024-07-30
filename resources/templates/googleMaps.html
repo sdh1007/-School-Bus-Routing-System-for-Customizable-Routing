@@ -1,0 +1,78 @@
+<!Doctype html>
+<html xmlns:th="http://ww.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Google Map</title>
+		<style>
+	#map{
+		height: 600px;
+		width: 100%;
+	}
+	</style>
+</head>
+<body>
+<h1>Google Map Display</h1>
+<script type="text/javascript" th:inline="javascript">
+function addMarker(coords) {
+    var marker = new google.maps.Marker({
+        position:coords,
+        map:map
+    })
+}
+//This is the function used to create the options for the google map
+function initMap(){
+	//var myLatlng = new google.maps.LatLng(-25.363882,131.044922);
+	
+		
+	var options = {
+		zoom: 7,
+		center: {lat: 40.7033 , lng: -77.5945 },
+		streetViewControl: false
+	}
+	//Creates a new map to display on the webpage
+	map = new google.maps.Map(document.getElementById("map"), options) 
+	
+	/*[# th:each="locationpoint : ${locationpoints}"]*/
+	var latLng = new google.maps.LatLng("[(${locationpoint.getLatitude()})]" , "[(${locationpoint.getLongitude()})]");
+	addMarker(latLng);
+	/*[/]*/
+		
+	//Place Location Markers
+	
+
+	// To add the marker to the map, call setMap();
+	
+	};
+
+</script>
+<div id="map"></div>
+<script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD390VrMYSzUckUBYiWeXy2ZvVDrNtWUPg&callback=initMap">
+</script>
+<table>
+	<thead>
+		<tr>
+				<th>Id</th>
+				<th>Latitude</th>
+				<th>Longitude</th>
+				<th>Location Point Name</th>
+				<th>Road Name</th>
+		</tr>
+		</thead>
+		<tbody>
+			 <tr th:each="locationpoint : ${locationpoints}">
+			   <td th:text="${locationpoint.location_id}"></td> 
+			   <td th:text="${locationpoint.latitude}"></td> 
+			   <td th:text="${locationpoint.longitude}"></td> 
+			   <td th:text="${locationpoint.locationPointName}"></td>
+			   <td th:text="${locationpoint.roadName}"></td> 
+
+			   
+			   <td><a th:href="@{/editLocation/{id}(id=${locationpoint.location_id})}">Edit</a></td>
+               <td><a th:href="@{/deleteLocation/{id}(id=${locationpoint.location_id})}">Delete</a></td> 
+		</tr>
+		</tbody>
+		</table>
+</body>
+
+</html>

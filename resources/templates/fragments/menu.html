@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+  <body>
+    <div id="menu" th:fragment="menu">
+		<div sec:authorize="hasAnyAuthority('System_Admin','Transportation_Manager','District_Admin','User')"> <a href="/index">Home</a> </div>
+		<div sec:authorize="hasAnyAuthority('System_Admin','District_Admin')"> <a href="/district">Districts</a> </div>
+		<div sec:authorize="hasAnyAuthority('Transportation_Manager','User')"> <a href="/school">Schools</a> </div>
+		<div sec:authorize="hasAnyAuthority('Transportation_Manager','User')"> <a href="/student">Students</a> </div>
+		<div sec:authorize="hasAnyAuthority('Transportation_Manager','User')"> <a href="/depot">Bus Depots</a> </div>
+		<div sec:authorize="hasAnyAuthority('Transportation_Manager','User')"> <a href="/vehicle">Vehicles</a> </div>
+		<div sec:authorize="hasAnyAuthority('Transportation_Manager','User')"> <a href="/driver">Drivers</a> </div>
+		<div sec:authorize="hasAnyAuthority('Transportation_Manager','User')"> <a href="/pickupDropoffs">Pickups/Dropoffs</a> </div>
+		<div sec:authorize="hasAnyAuthority('Transportation_Manager','User')"> <a href="/schoolGroups">Groups</a> </div>
+		<div sec:authorize="hasAnyAuthority('Transportation_Manager','User')"> <a href="/routing">Routes</a> </div>
+		<div sec:authorize="hasAnyAuthority('System_Admin','Transportation_Manager','District_Admin')"><a href="/users">Users</a></div>
+		<div sec:authorize="hasAnyAuthority('System_Admin')"> <a href="/files">Files</a> </div>
+		<div sec:authorize="hasAnyAuthority('System_Admin')"> <a href="/databaseOptions">Database Options</a> </div>
+	</div>
+  </body>
+</html>

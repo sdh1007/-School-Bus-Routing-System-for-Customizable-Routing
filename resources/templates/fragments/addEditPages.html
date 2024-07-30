@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<link rel="stylesheet" href="/css/style.css">
+	</head>
+  	<body>
+  		<div th:fragment="school">
+  			<div th:if="${errorMessage != null}" class="alert alert-secondary alert-dismissible fade show text-center message mt-3" role="alert">
+	  			[[${errorMessage }]]
+		    	<button type="button" class="close btn-sm" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">×</span>
+	    		</button>
+			</div>
+  		
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="schoolName">School Name</label>
+					<input type="text" th:field="*{schoolName}" id="schoolName" class="form-control" placeholder="School Name" required>
+					<span th:if="${#fields.hasErrors('schoolName')}" th:errors="*{schoolName}"></span>
+				</div>
+				
+				<div class="form-group col-md-6">
+					<label for="type">School Type</label>
+					<select th:field="*{type}" id="type" class="form-control" name="type" required>
+				    	<option value="Public">Public</option>
+				    	<option value="Private">Private</option>
+				    	<option value="Charter">Charter</option>
+				    	<option value="Other">Other</option>
+					</select>
+					<span th:if="${#fields.hasErrors('type')}" th:errors="*{type}"></span>
+				</div>
+			</div>
+			
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="schoolGrade">School Grade</label>
+					<select th:field="*{schoolGrade}" id="schoolGrade" class="form-control" name="schoolGrade" required>
+				    	<option value="Kindergarten">Kindergarten</option>
+				    	<option value="Elementary">Elementary School</option>
+				    	<option value="Middle School">Middle School</option>
+				  		<option value="High School">High School</option>
+				  		<option value="Any Grade">Any Grade</option>
+					</select>
+					<span th:if="${#fields.hasErrors('schoolGrade')}" th:errors="*{schoolGrade}"></span>
+				</div>
+				
+				<div class="form-group col-md-6">
+					<label for="phone">Phone Number:</label>
+				    <input type="text" th:field="*{phone}" id="phone" class="form-control" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-234-4567"  required>
+				    <span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>
+				</div>
+			</div>
+			
+			<div class="form-row">
+				<div class="form-group col-md-4">
+					<label for="startHour">Start Hour</label>
+					<select th:field="*{startHour}" id="startHour" name="startHour" class="form-control" required>
+				  		<option value=1>1</option>
+				  		<option value=2>2</option>
+				  		<option value=3>3</option>
+				  		<option value=4>4</option>
+				  		<option value=5>5</option>
+				  		<option value=6>6</option>
+				  		<option value=7>7</option>
+				  		<option value=8>8</option>
+				  		<option value=9>9</option>
+				  		<option value=10>10</option>
+				  		<option value=11>11</option>
+				  		<option value=12>12</option>
+					</select>
+					<span th:if="${#fields.hasErrors('startHour')}" th:errors="*{startHour}"></span>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="startMin">Start Minute</label>
+					<input type="number" th:field="*{startMin}" id="startMin" class="form-control" placeholder="00" min=0 max=59 oninput="validity.valid||(value='');" required>
+					<span th:if="${#fields.hasErrors('startMin')}" th:errors="*{startMin}"></span>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="startAmPm">Start AM or PM</label>
+					<select th:field="*{startAmPm}" id="startAmPm" name="startAmPm" class="form-control" required>
+				  		<option value="AM">AM</option>
+				  		<option value="PM">PM</option>
+					</select>
+					<span th:if="${#fields.hasErrors('startAmPm')}" th:errors="*{startAmPm}"></span>
+				</div>
+			</div>
+			
+			<div class="form-row">
+				<div class="form-group col-md-4">
+					<label for="endHour">End Hour</label>
+				    <select th:field="*{endHour}" id="endHour" name="endHour" class="form-control" required>
+				  		<option value=1>1</option>
+				  		<option value=2>2</option>
+				  		<option value=3>3</option>
+				  		<option value=4>4</option>
+				  		<option value=5>5</option>
+				  		<option value=6>6</option>
+				  		<option value=7>7</option>
+				  		<option value=8>8</option>
+				  		<option value=9>9</option>
+				  		<option value=10>10</option>
+				  		<option value=11>11</option>
+				  		<option value=12>12</option>
+					</select>
+				    <span th:if="${#fields.hasErrors('endHour')}" th:errors="*{endHour}"></span>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="endMin">End Minute</label>
+				    <input type="number" th:field="*{endMin}" id="endMin" class="form-control" placeholder="00" min=0 max=59 oninput="validity.valid||(value='');" required>
+				    <span th:if="${#fields.hasErrors('endMin')}" th:errors="*{endMin}"></span>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="endAmPm">End AM or PM</label>
+				    <select th:field="*{endAmPm}" id="endAmPm" name="endAmPm" class="form-control" required>
+				  		<option value="AM">AM</option>
+				  		<option value="PM">PM</option>
+					</select>
+				    <span th:if="${#fields.hasErrors('endAmPm')}" th:errors="*{endAmPm}"></span>
+				</div>
+			</div>
+			
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="startDate">Start Date:</label>
+				    <input type="date" th:field="*{startDate}" id="startDate" class="form-control" required>
+				    <span th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></span>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="endDate">End Date:</label>
+				    <input type="date" th:field="*{endDate}" id="endDate" class="form-control" required>
+				    <span th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}"></span>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="address">Address:</label>
+			    <input type="text" th:field="*{address}" id="address" class="form-control" placeholder="Address" required onclick="addMarker()">
+			    <span th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span>
+			</div>
+			
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="city">City:</label>
+				    <input type="text" th:field="*{city}" id="city" class="form-control" placeholder="City" required onclick="addMarker()">
+				    <span th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></span>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="state">State:</label>
+				    <select th:field="*{state}" id="state" class="form-control" name="state" required onclick="addMarker()">
+						  	<option value="AL">Alabama</option>
+							<option value="AK">Alaska</option>
+							<option value="AZ">Arizona</option>
+							<option value="AR">Arkansas</option>
+							<option value="CA">California</option>
+							<option value="CO">Colorado</option>
+							<option value="CT">Connecticut</option>
+							<option value="DE">Delaware</option>
+							<option value="DC">District Of Columbia</option>
+							<option value="FL">Florida</option>
+							<option value="GA">Georgia</option>
+							<option value="HI">Hawaii</option>
+							<option value="ID">Idaho</option>
+							<option value="IL">Illinois</option>
+							<option value="IN">Indiana</option>
+							<option value="IA">Iowa</option>
+							<option value="KS">Kansas</option>
+							<option value="KY">Kentucky</option>
+							<option value="LA">Louisiana</option>
+							<option value="ME">Maine</option>
+							<option value="MD">Maryland</option>
+							<option value="MA">Massachusetts</option>
+							<option value="MI">Michigan</option>
+							<option value="MN">Minnesota</option>
+							<option value="MS">Mississippi</option>
+							<option value="MO">Missouri</option>
+							<option value="MT">Montana</option>
+							<option value="NE">Nebraska</option>
+							<option value="NV">Nevada</option>
+							<option value="NH">New Hampshire</option>
+							<option value="NJ">New Jersey</option>
+							<option value="NM">New Mexico</option>
+							<option value="NY">New York</option>
+							<option value="NC">North Carolina</option>
+							<option value="ND">North Dakota</option>
+							<option value="OH">Ohio</option>
+							<option value="OK">Oklahoma</option>
+							<option value="OR">Oregon</option>
+							<option value="PA" selected>Pennsylvania</option>
+							<option value="RI">Rhode Island</option>
+							<option value="SC">South Carolina</option>
+							<option value="SD">South Dakota</option>
+							<option value="TN">Tennessee</option>
+							<option value="TX">Texas</option>
+							<option value="UT">Utah</option>
+							<option value="VT">Vermont</option>
+							<option value="VA">Virginia</option>
+							<option value="WA">Washington</option>
+							<option value="WV">West Virginia</option>
+							<option value="WI">Wisconsin</option>
+							<option value="WY">Wyoming</option>
+						</select>
+				    <span th:if="${#fields.hasErrors('state')}" th:errors="*{state}"></span>
+				</div>
+				<div class="form-group col-md-2">
+					<label for="zip">ZipCode:</label>
+				    <input type="number" th:field="*{zip}" id="zip" class="form-control" placeholder="Zip Code" required onclick="addMarker()">
+				    <span th:if="${#fields.hasErrors('zip')}" th:errors="*{zip}"></span>
+				</div>
+			</div>
+			
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<!-- <label for="location.latitude">Latitude:</label> -->
+				    <input type="hidden" th:field="*{location.latitude}" id="location.latitude" readonly required>
+				    <span th:if="${#fields.hasErrors('location.latitude')}" th:errors="*{location.latitude}"></span>
+				</div>
+				<div class="form-group col-md-6">
+					<!--<label for="location.longitude">Longitude:</label>  -->
+				    <input type="hidden" th:field="*{location.longitude}" id="location.longitude" readonly required>
+				    <span th:if="${#fields.hasErrors('location.longitude')}" th:errors="*{location.longitude}"></span>
+				</div>
+			</div>
+		</div>
+    	<div th:fragment="student">
+    		<input type="hidden" th:field="*{studentId}" value=""/>
+    		<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="schools">Choose a School</label>
+					<select id="schools" name="schools" class="form-control">
+						<option value="" selected disabled>Select a School</option>
+						<option th:each="school : ${schools}" th:text="${school.schoolName}" th:value="${school.id}" th:selected="${school.id == students?.school?.id}"></option>
+					</select>
+				</div>
+				
+				<div class="form-group col-md-6">
+					<label for="grade">Grade</label>
+					<select id="grade" name="grade" class="form-control" required>
+						<option value="" selected disabled>Select a Grade</option>
+				  		<option th:selected="${students.grade == 'PreK'}" value="PreK">Pre-K</option>
+				  		<option th:selected="${students.grade == 'KG'}" value="KG">Kindergarten</option>
+				  		<option th:selected="${students.grade == '1'}" value="1">First Grade</option>
+				  		<option th:selected="${students.grade == '2'}" value="2">Second Grade</option>
+				  		<option th:selected="${students.grade == '3'}" value="3">Third Grade</option>
+				  		<option th:selected="${students.grade == '4'}" value="4">Fourth Grade</option>
+				  		<option th:selected="${students.grade == '5'}" value="5">Fifth Grade</option>
+				  		<option th:selected="${students.grade == '6'}" value="6">Sixth Grade</option>
+				  		<option th:selected="${students.grade == '7'}" value="7">Seventh Grade</option>
+				  		<option th:selected="${students.grade == '8'}" value="8">Eighth Grade</option>
+				  		<option th:selected="${students.grade == '9'}" value="9">Ninth Grade</option>
+				  		<option th:selected="${students.grade == '10'}" value="10">Tenth Grade</option>
+				  		<option th:selected="${students.grade == '11'}" value="11">Eleventh Grade</option>
+				  		<option th:selected="${students.grade == '12'}" value="12">Twelfth Grade</option>
+					</select>
+					<span th:if="${#fields.hasErrors('grade')}" th:errors="*{grade}"></span>
+				</div>
+			</div>
+			
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="firstName">First Name</label>
+				    <input type="text" th:field="*{firstName}" id="firstName" class="form-control" placeholder="First Name" required>
+				    <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
+				</div>
+				
+				<div class="form-group col-md-6">
+					<label for="lastName">Last Name</label>
+				    <input type="text" th:field="*{lastName}" id="lastName" class="form-control" placeholder="Last Name" required>
+				    <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
+				</div>
+			</div>
+			
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="midName">Middle Name</label>
+				    <input type="text" th:field="*{midName}" id="midName" class="form-control" placeholder="Middle Name" required>
+				    <span th:if="${#fields.hasErrors('midName')}" th:errors="*{midName}"></span>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="suffix">Suffix</label>
+				    <input type="text" th:field="*{suffix}" id="suffix" class="form-control" placeholder="Sr., Jr., II.">
+				    <span th:if="${#fields.hasErrors('suffix')}" th:errors="*{suffix}"></span>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="studId">Student School Id</label>
+			    <input type="number" th:field="*{studId}" id="studId" class="form-control" placeholder="00001" required>
+			    <span th:if="${#fields.hasErrors('studId')}" th:errors="*{studId}"></span>
+			</div>
+			
+			<div class="form-group">
+				<label for="address1">Address</label>
+			    <input type="text" th:field="*{address1}" id="address1" class="form-control" placeholder="123 Address Way" required>
+			    <span th:if="${#fields.hasErrors('address1')}" th:errors="*{address1}"></span>
+			</div>
+			
+			<div class="form-group">
+				<label for="address2">Address 2</label>
+			    <input type="text" th:field="*{address2}" id="address2" class="form-control" placeholder="Apt 4">
+			    <span th:if="${#fields.hasErrors('address2')}" th:errors="*{address2}"></span>
+			</div> 
+			
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="city">City</label>
+				    <input type="text" th:field="*{city}" id="city" class="form-control" placeholder="City" required>
+				    <span th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></span>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="state">State</label>
+				    <select th:field="*{state}" id="state" class="form-control" name="state" required>
+					  	<option value="AL">Alabama</option>
+						<option value="AK">Alaska</option>
+						<option value="AZ">Arizona</option>
+						<option value="AR">Arkansas</option>
+						<option value="CA">California</option>
+						<option value="CO">Colorado</option>
+						<option value="CT">Connecticut</option>
+						<option value="DE">Delaware</option>
+						<option value="DC">District Of Columbia</option>
+						<option value="FL">Florida</option>
+						<option value="GA">Georgia</option>
+						<option value="HI">Hawaii</option>
+						<option value="ID">Idaho</option>
+						<option value="IL">Illinois</option>
+						<option value="IN">Indiana</option>
+						<option value="IA">Iowa</option>
+						<option value="KS">Kansas</option>
+						<option value="KY">Kentucky</option>
+						<option value="LA">Louisiana</option>
+						<option value="ME">Maine</option>
+						<option value="MD">Maryland</option>
+						<option value="MA">Massachusetts</option>
+						<option value="MI">Michigan</option>
+						<option value="MN">Minnesota</option>
+						<option value="MS">Mississippi</option>
+						<option value="MO">Missouri</option>
+						<option value="MT">Montana</option>
+						<option value="NE">Nebraska</option>
+						<option value="NV">Nevada</option>
+						<option value="NH">New Hampshire</option>
+						<option value="NJ">New Jersey</option>
+						<option value="NM">New Mexico</option>
+						<option value="NY">New York</option>
+						<option value="NC">North Carolina</option>
+						<option value="ND">North Dakota</option>
+						<option value="OH">Ohio</option>
+						<option value="OK">Oklahoma</option>
+						<option value="OR">Oregon</option>
+						<option value="PA" selected>Pennsylvania</option>
+						<option value="RI">Rhode Island</option>
+						<option value="SC">South Carolina</option>
+						<option value="SD">South Dakota</option>
+						<option value="TN">Tennessee</option>
+						<option value="TX">Texas</option>
+						<option value="UT">Utah</option>
+						<option value="VT">Vermont</option>
+						<option value="VA">Virginia</option>
+						<option value="WA">Washington</option>
+						<option value="WV">West Virginia</option>
+						<option value="WI">Wisconsin</option>
+						<option value="WY">Wyoming</option>
+					</select>
+				    <span th:if="${#fields.hasErrors('state')}" th:errors="*{state}"></span>
+				</div>
+				<div class="form-group col-md-2">
+					<label for="zipCode">ZipCode</label>
+				    <input type="text" th:field="*{zipCode}" id="zipCode" class="form-control" placeholder="ZipCode" required>
+				    <span th:if="${#fields.hasErrors('zipCode')}" th:errors="*{zipCode}"></span>
+				</div>
+			</div>
+			
+			<div class="form-group pickups">
+				<p>Pickup Days:</p>
+			
+				<div class="form-check form-check-inline">
+				  <input class="form-check-input" type="checkbox" id="allPickup" value="all">
+				  <label class="form-check-label" for="allPickup">All</label>
+				</div>
+				<div class="form-check form-check-inline">
+				  <input class="form-check-input" type="checkbox" id="pickupMonCheck" value="monday">
+				  <label class="form-check-label" for="pickupMonCheck">Monday</label>
+				</div>
+				<div class="form-check form-check-inline">
+				  <input class="form-check-input" type="checkbox" id="pickupTuesCheck" value="tuesday">
+				  <label class="form-check-label" for="pickupTuesCheck">Tuesday</label>
+				</div>
+				<div class="form-check form-check-inline">
+				  <input class="form-check-input" type="checkbox" id="pickupWedCheck" value="wednesday">
+				  <label class="form-check-label" for="pickupWedCheck">Wednesday</label>
+				</div>
+				<div class="form-check form-check-inline">
+				  <input class="form-check-input" type="checkbox" id="pickupThurCheck" value="thursday">
+				  <label class="form-check-label" for="pickupThurCheck">Thursday</label>
+				</div>
+				<div class="form-check form-check-inline">
+				  <input class="form-check-input" type="checkbox" id="pickupFriCheck" value="friday">
+				  <label class="form-check-label" for="pickupFriCheck">Friday</label>
+				</div>
+			</div>
+			
+			<div class="form-group dropoffs">
+				<p>Dropoff Days:</p>
+				
+				<div class="form-check form-check-inline">
+				  <input class="form-check-input" type="checkbox" id="allDropoff" value="all">
+				  <label class="form-check-label" for="allDropoff">All</label>
+				</div>
+				<div class="form-check form-check-inline">
+				  <input class="form-check-input" type="checkbox" id="dropoffMonCheck" value="monday">
+				  <label class="form-check-label" for="dropoffMonCheck">Monday</label>
+				</div>
+				<div class="form-check form-check-inline">
+				  <input class="form-check-input" type="checkbox" id="dropoffTuesCheck" value="tuesday">
+				  <label class="form-check-label" for="dropoffTuesCheck">Tuesday</label>
+				</div>
+				<div class="form-check form-check-inline">
+				  <input class="form-check-input" type="checkbox" id="dropoffWedCheck" value="wednesday">
+				  <label class="form-check-label" for="dropoffWedCheck">Wednesday</label>
+				</div>
+				<div class="form-check form-check-inline">
+				  <input class="form-check-input" type="checkbox" id="dropoffThurCheck" value="thursday">
+				  <label class="form-check-label" for="dropoffThurCheck">Thursday</label>
+				</div>
+				<div class="form-check form-check-inline">
+				  <input class="form-check-input" type="checkbox" id="dropoffFriCheck" value="friday">
+				  <label class="form-check-label" for="dropoffFriCheck">Friday</label>
+				</div>
+			</div>
+			
+			<div id="alt1" class="alts">
+				<div class="form-group">
+					<label for="alt1Address1">Alt1 Address</label>
+				    <input type="text" th:field="*{alt1Address1}" id="alt1Address1" class="form-control" placeholder="123 Address Way">
+				    <span th:if="${#fields.hasErrors('alt1Address1')}" th:errors="*{alt1Address1}"></span>
+				</div> 
+				
+				<div class="form-group">
+					<label for="alt1Address2">Alt1 Address 2</label>
+				    <input type="text" th:field="*{alt1Address2}" id="alt1Address2" class="form-control" placeholder="Apt 4">
+				    <span th:if="${#fields.hasErrors('alt1Address2')}" th:errors="*{alt1Address2}"></span>
+				</div> 
+				
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="alt1City">Alt1 City</label>
+					    <input type="text" th:field="*{alt1City}" id="alt1City" class="form-control" placeholder="City">
+					    <span th:if="${#fields.hasErrors('alt1City')}" th:errors="*{alt1City}"></span>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="alt1State">Alt1 State</label>
+					    <select th:field="*{alt1State}" id="alt1State" class="form-control" name="alt1State">
+						  	<option value="AL">Alabama</option>
+							<option value="AK">Alaska</option>
+							<option value="AZ">Arizona</option>
+							<option value="AR">Arkansas</option>
+							<option value="CA">California</option>
+							<option value="CO">Colorado</option>
+							<option value="CT">Connecticut</option>
+							<option value="DE">Delaware</option>
+							<option value="DC">District Of Columbia</option>
+							<option value="FL">Florida</option>
+							<option value="GA">Georgia</option>
+							<option value="HI">Hawaii</option>
+							<option value="ID">Idaho</option>
+							<option value="IL">Illinois</option>
+							<option value="IN">Indiana</option>
+							<option value="IA">Iowa</option>
+							<option value="KS">Kansas</option>
+							<option value="KY">Kentucky</option>
+							<option value="LA">Louisiana</option>
+							<option value="ME">Maine</option>
+							<option value="MD">Maryland</option>
+							<option value="MA">Massachusetts</option>
+							<option value="MI">Michigan</option>
+							<option value="MN">Minnesota</option>
+							<option value="MS">Mississippi</option>
+							<option value="MO">Missouri</option>
+							<option value="MT">Montana</option>
+							<option value="NE">Nebraska</option>
+							<option value="NV">Nevada</option>
+							<option value="NH">New Hampshire</option>
+							<option value="NJ">New Jersey</option>
+							<option value="NM">New Mexico</option>
+							<option value="NY">New York</option>
+							<option value="NC">North Carolina</option>
+							<option value="ND">North Dakota</option>
+							<option value="OH">Ohio</option>
+							<option value="OK">Oklahoma</option>
+							<option value="OR">Oregon</option>
+							<option value="PA" selected>Pennsylvania</option>
+							<option value="RI">Rhode Island</option>
+							<option value="SC">South Carolina</option>
+							<option value="SD">South Dakota</option>
+							<option value="TN">Tennessee</option>
+							<option value="TX">Texas</option>
+							<option value="UT">Utah</option>
+							<option value="VT">Vermont</option>
+							<option value="VA">Virginia</option>
+							<option value="WA">Washington</option>
+							<option value="WV">West Virginia</option>
+							<option value="WI">Wisconsin</option>
+							<option value="WY">Wyoming</option>
+						</select>
+					    <span th:if="${#fields.hasErrors('alt1State')}" th:errors="*{alt1State}"></span>
+					</div>
+					<div class="form-group col-md-2">
+						<label for="alt1ZipCode">Alt1 ZipCode</label>
+					    <input type="text" th:field="*{alt1ZipCode}" id="alt1ZipCode" class="form-control" placeholder="ZipCode">
+					    <span th:if="${#fields.hasErrors('alt1ZipCode')}" th:errors="*{alt1ZipCode}"></span>
+					</div>
+				</div>
+				<div class="form-group pickups">
+					<p>Pickup Days:</p>
+				
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="allPickup" value="all">
+					  <label class="form-check-label" for="allPickup">All</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="pickupMonCheck" value="monday">
+					  <label class="form-check-label" for="pickupMonCheck">Monday</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="pickupTuesCheck" value="tuesday">
+					  <label class="form-check-label" for="pickupTuesCheck">Tuesday</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="pickupWedCheck" value="wednesday">
+					  <label class="form-check-label" for="pickupWedCheck">Wednesday</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="pickupThurCheck" value="thursday">
+					  <label class="form-check-label" for="pickupThurCheck">Thursday</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="pickupFriCheck" value="friday">
+					  <label class="form-check-label" for="pickupFriCheck">Friday</label>
+					</div>
+				</div>
+				
+				<div class="form-group dropoffs">
+					<p>Dropoff Days:</p>
+					
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="allDropoff" value="all">
+					  <label class="form-check-label" for="allDropoff">All</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="dropoffMonCheck" value="monday">
+					  <label class="form-check-label" for="dropoffMonCheck">Monday</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="dropoffTuesCheck" value="tuesday">
+					  <label class="form-check-label" for="dropoffTuesCheck">Tuesday</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="dropoffWedCheck" value="wednesday">
+					  <label class="form-check-label" for="dropoffWedCheck">Wednesday</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="dropoffThurCheck" value="thursday">
+					  <label class="form-check-label" for="dropoffThurCheck">Thursday</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="dropoffFriCheck" value="friday">
+					  <label class="form-check-label" for="dropoffFriCheck">Friday</label>
+					</div>
+				</div>
+			</div>
+			
+			<div id="alt2" class="alts">
+				<div class="form-group">
+					<label for="alt2Address1">Alt2 Address</label>
+				    <input type="text" th:field="*{alt2Address1}" id="alt2Address1" class="form-control" placeholder="123 Address Way">
+				    <span th:if="${#fields.hasErrors('alt2Address1')}" th:errors="*{alt2Address1}"></span>
+				</div> 
+				
+				<div class="form-group">
+					<label for="alt2Address2">Alt2 Address 2</label>
+				    <input type="text" th:field="*{alt2Address2}" id="alt2Address2" class="form-control" placeholder="Apt 4">
+				    <span th:if="${#fields.hasErrors('alt2Address2')}" th:errors="*{alt2Address2}"></span>
+				</div> 
+				
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="alt2City">Alt2 City</label>
+					    <input type="text" th:field="*{alt2City}" id="alt2City" class="form-control" placeholder="City">
+					    <span th:if="${#fields.hasErrors('alt2City')}" th:errors="*{alt2City}"></span>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="alt2State">Alt2 State</label>
+					    <select th:field="*{alt2State}" id="alt2State" class="form-control" name="alt2State">
+						  	<option value="AL">Alabama</option>
+							<option value="AK">Alaska</option>
+							<option value="AZ">Arizona</option>
+							<option value="AR">Arkansas</option>
+							<option value="CA">California</option>
+							<option value="CO">Colorado</option>
+							<option value="CT">Connecticut</option>
+							<option value="DE">Delaware</option>
+							<option value="DC">District Of Columbia</option>
+							<option value="FL">Florida</option>
+							<option value="GA">Georgia</option>
+							<option value="HI">Hawaii</option>
+							<option value="ID">Idaho</option>
+							<option value="IL">Illinois</option>
+							<option value="IN">Indiana</option>
+							<option value="IA">Iowa</option>
+							<option value="KS">Kansas</option>
+							<option value="KY">Kentucky</option>
+							<option value="LA">Louisiana</option>
+							<option value="ME">Maine</option>
+							<option value="MD">Maryland</option>
+							<option value="MA">Massachusetts</option>
+							<option value="MI">Michigan</option>
+							<option value="MN">Minnesota</option>
+							<option value="MS">Mississippi</option>
+							<option value="MO">Missouri</option>
+							<option value="MT">Montana</option>
+							<option value="NE">Nebraska</option>
+							<option value="NV">Nevada</option>
+							<option value="NH">New Hampshire</option>
+							<option value="NJ">New Jersey</option>
+							<option value="NM">New Mexico</option>
+							<option value="NY">New York</option>
+							<option value="NC">North Carolina</option>
+							<option value="ND">North Dakota</option>
+							<option value="OH">Ohio</option>
+							<option value="OK">Oklahoma</option>
+							<option value="OR">Oregon</option>
+							<option value="PA" selected>Pennsylvania</option>
+							<option value="RI">Rhode Island</option>
+							<option value="SC">South Carolina</option>
+							<option value="SD">South Dakota</option>
+							<option value="TN">Tennessee</option>
+							<option value="TX">Texas</option>
+							<option value="UT">Utah</option>
+							<option value="VT">Vermont</option>
+							<option value="VA">Virginia</option>
+							<option value="WA">Washington</option>
+							<option value="WV">West Virginia</option>
+							<option value="WI">Wisconsin</option>
+							<option value="WY">Wyoming</option>
+						</select>
+					    <span th:if="${#fields.hasErrors('alt2State')}" th:errors="*{alt2State}"></span>
+					</div>
+					<div class="form-group col-md-2">
+						<label for="alt2ZipCode">Alt2 ZipCode</label>
+					    <input type="text" th:field="*{alt2ZipCode}" id="alt2ZipCode" class="form-control" placeholder="ZipCode">
+					    <span th:if="${#fields.hasErrors('alt2ZipCode')}" th:errors="*{alt2ZipCode}"></span>
+					</div>
+				</div>
+				<div class="form-group pickups">
+					<p>Pickup Days:</p>
+				
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="allPickup" value="all">
+					  <label class="form-check-label" for="allPickup">All</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="pickupMonCheck" value="monday">
+					  <label class="form-check-label" for="pickupMonCheck">Monday</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="pickupTuesCheck" value="tuesday">
+					  <label class="form-check-label" for="pickupTuesCheck">Tuesday</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="pickupWedCheck" value="wednesday">
+					  <label class="form-check-label" for="pickupWedCheck">Wednesday</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="pickupThurCheck" value="thursday">
+					  <label class="form-check-label" for="pickupThurCheck">Thursday</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="pickupFriCheck" value="friday">
+					  <label class="form-check-label" for="pickupFriCheck">Friday</label>
+					</div>
+				</div>
+				
+				<div class="form-group dropoffs">
+					<p>Dropoff Days:</p>
+					
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="allDropoff" value="all">
+					  <label class="form-check-label" for="allDropoff">All</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="dropoffMonCheck" value="monday">
+					  <label class="form-check-label" for="dropoffMonCheck">Monday</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="dropoffTuesCheck" value="tuesday">
+					  <label class="form-check-label" for="dropoffTuesCheck">Tuesday</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="dropoffWedCheck" value="wednesday">
+					  <label class="form-check-label" for="dropoffWedCheck">Wednesday</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="dropoffThurCheck" value="thursday">
+					  <label class="form-check-label" for="dropoffThurCheck">Thursday</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="dropoffFriCheck" value="friday">
+					  <label class="form-check-label" for="dropoffFriCheck">Friday</label>
+					</div>
+				</div>
+			</div>
+			
+			<div id="alt3" class="alts">
+				<div class="form-group">
+					<label for="alt3Address1">Alt3 Address</label>
+				    <input type="text" th:field="*{alt3Address1}" id="alt3Address1" class="form-control" placeholder="123 Address Way">
+				    <span th:if="${#fields.hasErrors('alt3Address1')}" th:errors="*{alt3Address1}"></span>
+				</div> 
+				
+				<div class="form-group">
+					<label for="alt3Address2">Alt3 Address 2</label>
+				    <input type="text" th:field="*{alt3Address2}" id="alt3Address2" class="form-control" placeholder="Apt 4">
+				    <span th:if="${#fields.hasErrors('alt3Address2')}" th:errors="*{alt3Address2}"></span>
+				</div> 
+				
+				<div class="form-row">
+					<div class="form-group col-md-6">
+						<label for="alt3City">Alt3 City</label>
+					    <input type="text" th:field="*{alt3City}" id="alt3City" class="form-control" placeholder="City">
+					    <span th:if="${#fields.hasErrors('alt3City')}" th:errors="*{alt3City}"></span>
+					</div>
+					<div class="form-group col-md-4">
+						<label for="alt3State">Alt3 State</label>
+					    <select th:field="*{alt3State}" id="alt3State" class="form-control" name="alt3State">
+						  	<option value="AL">Alabama</option>
+							<option value="AK">Alaska</option>
+							<option value="AZ">Arizona</option>
+							<option value="AR">Arkansas</option>
+							<option value="CA">California</option>
+							<option value="CO">Colorado</option>
+							<option value="CT">Connecticut</option>
+							<option value="DE">Delaware</option>
+							<option value="DC">District Of Columbia</option>
+							<option value="FL">Florida</option>
+							<option value="GA">Georgia</option>
+							<option value="HI">Hawaii</option>
+							<option value="ID">Idaho</option>
+							<option value="IL">Illinois</option>
+							<option value="IN">Indiana</option>
+							<option value="IA">Iowa</option>
+							<option value="KS">Kansas</option>
+							<option value="KY">Kentucky</option>
+							<option value="LA">Louisiana</option>
+							<option value="ME">Maine</option>
+							<option value="MD">Maryland</option>
+							<option value="MA">Massachusetts</option>
+							<option value="MI">Michigan</option>
+							<option value="MN">Minnesota</option>
+							<option value="MS">Mississippi</option>
+							<option value="MO">Missouri</option>
+							<option value="MT">Montana</option>
+							<option value="NE">Nebraska</option>
+							<option value="NV">Nevada</option>
+							<option value="NH">New Hampshire</option>
+							<option value="NJ">New Jersey</option>
+							<option value="NM">New Mexico</option>
+							<option value="NY">New York</option>
+							<option value="NC">North Carolina</option>
+							<option value="ND">North Dakota</option>
+							<option value="OH">Ohio</option>
+							<option value="OK">Oklahoma</option>
+							<option value="OR">Oregon</option>
+							<option value="PA" selected>Pennsylvania</option>
+							<option value="RI">Rhode Island</option>
+							<option value="SC">South Carolina</option>
+							<option value="SD">South Dakota</option>
+							<option value="TN">Tennessee</option>
+							<option value="TX">Texas</option>
+							<option value="UT">Utah</option>
+							<option value="VT">Vermont</option>
+							<option value="VA">Virginia</option>
+							<option value="WA">Washington</option>
+							<option value="WV">West Virginia</option>
+							<option value="WI">Wisconsin</option>
+							<option value="WY">Wyoming</option>
+						</select>
+					    <span th:if="${#fields.hasErrors('alt3State')}" th:errors="*{alt3State}"></span>
+					</div>
+					<div class="form-group col-md-2">
+						<label for="alt3ZipCode">Alt3 ZipCode</label>
+					    <input type="text" th:field="*{alt3ZipCode}" id="alt3ZipCode" class="form-control" placeholder="ZipCode">
+					    <span th:if="${#fields.hasErrors('alt3ZipCode')}" th:errors="*{alt3ZipCode}"></span>
+					</div>
+				</div>
+				<div class="form-group pickups">
+					<p>Pickup Days:</p>
+				
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="allPickup" value="all">
+					  <label class="form-check-label" for="allPickup">All</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="pickupMonCheck" value="monday">
+					  <label class="form-check-label" for="pickupMonCheck">Monday</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="pickupTuesCheck" value="tuesday">
+					  <label class="form-check-label" for="pickupTuesCheck">Tuesday</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="pickupWedCheck" value="wednesday">
+					  <label class="form-check-label" for="pickupWedCheck">Wednesday</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="pickupThurCheck" value="thursday">
+					  <label class="form-check-label" for="pickupThurCheck">Thursday</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="pickupFriCheck" value="friday">
+					  <label class="form-check-label" for="pickupFriCheck">Friday</label>
+					</div>
+				</div>
+				
+				<div class="form-group dropoffs">
+					<p>Dropoff Days:</p>
+					
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="allDropoff" value="all">
+					  <label class="form-check-label" for="allDropoff">All</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="dropoffMonCheck" value="monday">
+					  <label class="form-check-label" for="dropoffMonCheck">Monday</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="dropoffTuesCheck" value="tuesday">
+					  <label class="form-check-label" for="dropoffTuesCheck">Tuesday</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="dropoffWedCheck" value="wednesday">
+					  <label class="form-check-label" for="dropoffWedCheck">Wednesday</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="dropoffThurCheck" value="thursday">
+					  <label class="form-check-label" for="dropoffThurCheck">Thursday</label>
+					</div>
+					<div class="form-check form-check-inline">
+					  <input class="form-check-input" type="checkbox" id="dropoffFriCheck" value="friday">
+					  <label class="form-check-label" for="dropoffFriCheck">Friday</label>
+					</div>
+				</div>
+			</div>
+			
+			<div id="formIcons" class="form-group text-center">
+				<img src="/imgs/plusIcon.png" class="formIcon" id="plusIcon" title="Add Alternate Address">
+				<img src="/imgs/minusIcon.png" class="formIcon" id="minusIcon" title="Remove Alternate Address">
+			</div>
+			
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="sex">Sex</label>					    
+				    <select th:field="*{gender}" id="gender" class="form-control" name="sex" required>
+				        <option value="">Select Sex</option>
+				  		<option value="Male">Male</option>
+				  		<option value="Female">Female</option>
+				  		<option value="Other">Other</option>
+					</select>
+					
+				    <span th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}"></span>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="birthDate">DOB</label>
+				    <input type="date" th:field="*{birthDate}" id="birthDate" class="form-control" placeholder="Date-Of-Birth" required>
+				    <span th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></span>
+				</div>
+			</div>
+			
+			<div class="form-row">
+				<div class="form-group col-md-4">
+					<label for="phoneNum">Phone</label>
+				    <input type="text" th:field="*{phoneNum}" id="phoneNum" class="form-control" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-234-4567" required>
+				    <span th:if="${#fields.hasErrors('phoneNum')}" th:errors="*{phoneNum}"></span>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="cellPhoneNum">Cell Phone</label>
+					<input type="text" th:field="*{cellPhoneNum}" class="form-control" id="cellPhoneNum" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-234-4567">
+				    <span th:if="${#fields.hasErrors('cellPhoneNum')}" th:errors="*{cellPhoneNum}"></span>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="emergencyPhoneNum">Emergency Phone</label>
+				    <input type="text" th:field="*{emergencyPhoneNum}" class="form-control" id="emergencyPhoneNum" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-234-4567" >
+				    <span th:if="${#fields.hasErrors('emergencyPhoneNum')}" th:errors="*{emergencyPhoneNum}"></span>
+				</div>
+			</div>
+			
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="parentName">Parent Name</label>
+				    <input type="text" th:field="*{parentName}" class="form-control" id="parentName" placeholder="Parent Name" required>
+				    <span th:if="${#fields.hasErrors('parentName')}" th:errors="*{parentName}"></span>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="travelMode">Travel Mode</label>
+				    <select th:field="*{travelMode}" id="travelMode" class="form-control" name="travelMode" required>
+				        <option value="None">None</option>
+				  		<option value="School Bus">School Bus</option>
+				  		<option value="Short Bus">Short Bus</option>
+					</select>
+				    <span th:if="${#fields.hasErrors('travelMode')}" th:errors="*{travelMode}"></span>
+				</div>
+			</div>
+			
+			<div class="form-row">
+				<div class="form-group col-md-4">
+					<label for="driverNote">Driver Note</label>
+				    <input type="text" th:field="*{driverNote}" id="driverNote" class="form-control" placeholder="Driver Notes">
+				    <span th:if="${#fields.hasErrors('driverNote')}" th:errors="*{driverNote}"></span>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="misc">Miscellaneous</label>
+				    <input type="text" th:field="*{misc}" id="misc" class="form-control" placeholder="Misc">
+				    <span th:if="${#fields.hasErrors('misc')}" th:errors="*{misc}"></span>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="journal">Journal</label>
+				    <input type="text" th:field="*{journal}" id="journal" class="form-control" placeholder="Journal">
+				    <span th:if="${#fields.hasErrors('journal')}" th:errors="*{journal}"></span>
+				</div>
+			</div>
+			
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="medical">Medical</label>
+				    <input type="text" th:field="*{medical}" id="medical" class="form-control" placeholder="Medical">
+				    <span th:if="${#fields.hasErrors('medical')}" th:errors="*{medical}"></span>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="studentType1">Student Type</label>
+				    <select th:field="*{studentType1}" id="studentType1" class="form-control" name="studentType1" required>
+				        <option value="Regular">Regular</option>
+				        <option value="Special Needs">Special Needs</option>
+				        <option value="Other">Other</option>
+					</select>
+				    <span th:if="${#fields.hasErrors('studentType1')}" th:errors="*{studentType1}"></span>
+				</div>
+			</div>
+    	</div>
+    	<div th:fragment="depot">
+    		<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="name">Depot Name</label>
+				    <input type="text" th:field="*{name}" id="name" class="form-control" placeholder="Depot Name" required>
+				    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+				</div>
+				
+				<div class="form-group col-md-6">
+					<label for="contractor">Contractor Id</label>
+				    <input type="text" th:field="*{contractor}" id="contractor" class="form-control" placeholder="Contractor" required>
+				    <span th:if="${#fields.hasErrors('contractor')}" th:errors="*{contractor}"></span>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="address1">Address 1</label>
+			    <input type="text" th:field="*{address1}" id="address1" class="form-control" placeholder="Main Address" required>
+			    <span th:if="${#fields.hasErrors('address1')}" th:errors="*{address1}"></span>
+			</div>
+			
+			<div class="form-group">
+				<label for="address2">Address 2</label>
+			    <input type="text" th:field="*{address2}" id="address2" class="form-control" placeholder="Optional">
+			    <span th:if="${#fields.hasErrors('address2')}" th:errors="*{address2}"></span>
+			</div> 
+			
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="city">City</label>
+				    <input type="text" th:field="*{city}" id="city" class="form-control" placeholder="City" required>
+				    <span th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></span>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="state">State</label>
+			    	<select th:field="*{state}" id="state" name="state" class="form-control" required>
+					  	<option value="AL">Alabama</option>
+						<option value="AK">Alaska</option>
+						<option value="AZ">Arizona</option>
+						<option value="AR">Arkansas</option>
+						<option value="CA">California</option>
+						<option value="CO">Colorado</option>
+						<option value="CT">Connecticut</option>
+						<option value="DE">Delaware</option>
+						<option value="DC">District Of Columbia</option>
+						<option value="FL">Florida</option>
+						<option value="GA">Georgia</option>
+						<option value="HI">Hawaii</option>
+						<option value="ID">Idaho</option>
+						<option value="IL">Illinois</option>
+						<option value="IN">Indiana</option>
+						<option value="IA">Iowa</option>
+						<option value="KS">Kansas</option>
+						<option value="KY">Kentucky</option>
+						<option value="LA">Louisiana</option>
+						<option value="ME">Maine</option>
+						<option value="MD">Maryland</option>
+						<option value="MA">Massachusetts</option>
+						<option value="MI">Michigan</option>
+						<option value="MN">Minnesota</option>
+						<option value="MS">Mississippi</option>
+						<option value="MO">Missouri</option>
+						<option value="MT">Montana</option>
+						<option value="NE">Nebraska</option>
+						<option value="NV">Nevada</option>
+						<option value="NH">New Hampshire</option>
+						<option value="NJ">New Jersey</option>
+						<option value="NM">New Mexico</option>
+						<option value="NY">New York</option>
+						<option value="NC">North Carolina</option>
+						<option value="ND">North Dakota</option>
+						<option value="OH">Ohio</option>
+						<option value="OK">Oklahoma</option>
+						<option value="OR">Oregon</option>
+						<option value="PA" selected>Pennsylvania</option>
+						<option value="RI">Rhode Island</option>
+						<option value="SC">South Carolina</option>
+						<option value="SD">South Dakota</option>
+						<option value="TN">Tennessee</option>
+						<option value="TX">Texas</option>
+						<option value="UT">Utah</option>
+						<option value="VT">Vermont</option>
+						<option value="VA">Virginia</option>
+						<option value="WA">Washington</option>
+						<option value="WV">West Virginia</option>
+						<option value="WI">Wisconsin</option>
+						<option value="WY">Wyoming</option>
+					</select>
+			    	<span th:if="${#fields.hasErrors('state')}" th:errors="*{state}"></span>
+				</div>
+				<div class="form-group col-md-2">
+					<label for="zipCode">ZipCode</label>
+				    <input type="text" th:field="*{zipCode}" id="zipCode" class="form-control" placeholder="ZipCode" required>
+				    <span th:if="${#fields.hasErrors('zipCode')}" th:errors="*{zipCode}"></span>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="roadName">Road Name</label>
+			    <input type="text" th:field="*{roadName}" id="roadName" class="form-control" placeholder="Road Name" required>
+			    <span th:if="${#fields.hasErrors('roadName')}" th:errors="*{roadName}"></span>
+			</div>
+			
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<!-- <label for="location.latitude">Latitude:</label>  -->
+				    <input type="hidden" th:field="*{location.latitude}" id="location.latitude" readonly required>
+				    <span th:if="${#fields.hasErrors('location.latitude')}" th:errors="*{location.latitude}"></span>
+				</div>
+				<div class="form-group col-md-6">
+					<!-- <label for="location.longitude">Longitude:</label> -->
+				    <input type="hidden" th:field="*{location.longitude}" id="location.longitude" readonly required>
+				    <span th:if="${#fields.hasErrors('location.longitude')}" th:errors="*{location.longitude}"></span>
+				</div>
+			</div>
+    	</div>
+    	<div th:fragment="vehicle">
+    		<div class="form-row">
+    			<div class="form-group col-md-6">
+					<label for="vehicleType">Vehicle Type</label>
+			        <select th:field="*{vehicleType}" id="vehicleType" class="form-control" name="vehicleType" required>
+				  		<option value="" hiddend>Please select a vehicle type</option>
+				  		<option value="Bus">Bus</option>
+				  		<option value="Van">Van</option>
+				  		<option value="Other">Other</option>
+					</select>
+			    	<span th:if="${#fields.hasErrors('vehicleType')}" th:errors="*{vehicleType}"></span>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="vehicleCode">Vehicle Code</label>
+				    <input type="text" th:field="*{vehicleCode}" id="vehicleCode" class="form-control" placeholder="CAM-15-72-R-1" required>
+				    <span th:if="${#fields.hasErrors('vehicleCode')}" th:errors="*{vehicleCode}"></span>
+				</div>	
+			</div>
+
+			<div class="form-group">
+				<label for="locationType">Location Type</label>
+		        <select th:field="*{locationType}" id="locationType" class="form-control" name="locationType" required>
+			  		<option value="" hidden>Please select a location type</option>
+			  		<option value="Depot">Depot</option>
+			  		<option value="Warehouse">Warehouse</option>
+			  		<option value="School Lot">School Lot</option>
+			  		<option value="Other">Other</option>
+				</select>
+			    <span th:if="${#fields.hasErrors('locationType')}" th:errors="*{locationType}"></span>
+			</div>
+			
+			<div class="form-group" id="depotList">
+				<label for="depots">Assign Depot:</label>
+				<select th:field="*{depot}" id="depot" class="form-control" name="depots">
+					<option value="" hidden>Please select a depot</option>
+				  	<option th:each="depot : ${depots}" th:text="${depot.name}" th:value="${depot.depotId}"></option>
+				</select>
+			</div>
+						
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="seatNumber">Number of Seats</label>
+				    <input type="number" th:field="*{seatNumber}" class="form-control" id="seatNumber" min="0" required>
+				    <span th:if="${#fields.hasErrors('seatNumber')}" th:errors="*{seatNumber}"></span>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="enterDate">Entry Date</label>
+				    <input type="date" th:field="*{enterDate}" class="form-control" id="enterDate" required>
+				    <span th:if="${#fields.hasErrors('enterDate')}" th:errors="*{enterDate}"></span>
+				</div>
+			</div>
+			
+			<div class="form-check form-group">
+			    <input class="form-check-input" type="checkbox" name="isActive" id="isActive" th:field="*{isActive}">
+			    <label class="form-check-label" for="isActive">Currently Active?</label>
+			</div>
+    	</div>
+    	<div th:fragment="driver">
+    		<div class="form-group">
+				<label for="name">Full Name</label>
+			    <input type="text" th:field="*{name}" id="name" class="form-control" placeholder="Full Name"required>
+			    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+			</div>
+			
+			<div class="form-group">
+				<label for="type">Driver Type</label>
+			    <input type="text" th:field="*{type}" id="type" class="form-control" placeholder="Driver Type" required>
+			    <span th:if="${#fields.hasErrors('type')}" th:errors="*{type}"></span>
+			</div>
+			
+    		<div class="form-row">
+				<div class="form-group col-md-4">
+					<label for="approved">Approval Date</label>
+				    <input type="date" th:field="*{approved}" id="approved" class="form-control" required>
+				    <span th:if="${#fields.hasErrors('approved')}" th:errors="*{approved}"></span>
+				</div>
+				
+				<div class="form-group col-md-4">
+					<label for="medClearDate">Medical Clear Date</label>
+				    <input type="date" th:field="*{medClearDate}" id="medClearDate" class="form-control" required>
+				    <span th:if="${#fields.hasErrors('medClearDate')}" th:errors="*{medClearDate}"></span>
+				</div>
+				
+				<div class="form-group col-md-4">
+					<label for="commDrvLicDate">Complete Driver License Date</label>
+				    <input type="date" th:field="*{commDrvLicDate}" id="commDrvLicDate" class="form-control" required>
+				    <span th:if="${#fields.hasErrors('commDrvLicDate')}" th:errors="*{commDrvLicDate}"></span>
+				</div>
+			</div>
+			
+			<div class="form-row">
+				<div class="form-group col-md-4">
+					<label for="motorVehRecDate">Motor Vehicle Record Date</label>
+				    <input type="date" th:field="*{motorVehRecDate}" id="motorVehRecDate" class="form-control" required>
+				    <span th:if="${#fields.hasErrors('motorVehRecDate')}" th:errors="*{motorVehRecDate}"></span>
+				</div>
+				
+				<div class="form-group col-md-4">
+					<label for="applicationDate">Application Date</label>
+				    <input type="date" th:field="*{applicationDate}" id="applicationDate" class="form-control" required>
+				    <span th:if="${#fields.hasErrors('applicationDate')}" th:errors="*{applicationDate}"></span>
+				</div>
+				
+				<div class="form-group col-md-4">
+					<label for="driverPhotoLicDate">Driver License Photo Date</label>
+				    <input type="date" th:field="*{driverPhotoLicDate}" id="driverPhotoLicDate" class="form-control" required>
+				    <span th:if="${#fields.hasErrors('driverPhotoLicDate')}" th:errors="*{driverPhotoLicDate}"></span>
+				</div>
+			</div>
+			
+			<div class="form-row">
+				<div class="form-group col-md-4">
+					<label for="cprFirstAidDate">CPR First Aid Date</label>
+				    <input type="date" th:field="*{cprFirstAidDate}" id="cprFirstAidDate" class="form-control" required>
+				    <span th:if="${#fields.hasErrors('cprFirstAidDate')}" th:errors="*{cprFirstAidDate}"></span>
+				</div>
+				
+				<div class="form-group col-md-4">
+					<label for="tbTestDate">TB Test Date</label>
+				    <input type="date" th:field="*{tbTestDate}" id="tbTestDate" class="form-control" required>
+				    <span th:if="${#fields.hasErrors('tbTestDate')}" th:errors="*{tbTestDate}"></span>
+				</div>
+				
+				<div class="form-group col-md-4">
+				    <label for="i9Date">I9 Date</label>
+				    <input type="date" th:field="*{i9Date}" id="i9Date" class="form-control" required>
+				    <span th:if="${#fields.hasErrors('i9Date')}" th:errors="*{i9Date}"></span>
+				</div>
+			</div>
+			
+			<div class="form-row">
+				<div class="form-group col-md-4">
+					<label for="act151ChildAbuseDate">Act 151 Child Abuse Date</label>
+				    <input type="date" th:field="*{i9Date}" id="act151ChildAbuseDate" class="form-control" required>
+				    <span th:if="${#fields.hasErrors('act151ChildAbuseDate')}" th:errors="*{act151ChildAbuseDate}"></span>
+				</div>
+				
+				<div class="form-group col-md-4">
+					<label for="act114FedCrimeDate">Act 114 Federal Crime Date</label>
+				    <input type="date" th:field="*{act114FedCrimeDate}" id="act114FedCrimeDate" class="form-control" required>
+				    <span th:if="${#fields.hasErrors('act114FedCrimeDate')}" th:errors="*{act114FedCrimeDate}"></span>
+				</div>
+				
+				<div class="form-group col-md-4">
+					<label for="act34PaStateDate">Act 34 PA State Date</label>
+				    <input type="date" th:field="*{act34PaStateDate}" id="act34PaStateDate" class="form-control" required>
+				    <span th:if="${#fields.hasErrors('act34PaStateDate')}" th:errors="*{act34PaStateDate}"></span>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="address1">Address 1</label>
+			    <input type="text" th:field="*{address1}" id="address1" class="form-control" placeholder="Primary Address" required>
+			    <span th:if="${#fields.hasErrors('address1')}" th:errors="*{address1}"></span>
+			</div> 
+			
+			<div class="form-group">
+			
+				<label for="address2">Address 2</label>
+			    <input type="text" th:field="*{address2}" id="address2" class="form-control" placeholder="Secondary Address">
+			    <span th:if="${#fields.hasErrors('address2')}" th:errors="*{address2}"></span>
+			</div>
+			
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="city">City</label>
+				    <input type="text" th:field="*{city}" id="city" class="form-control" placeholder="City" required>
+				    <span th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></span>
+				</div>
+				<div class="form-group col-md-4">
+					<label for="state">State</label>
+				    <input type="text" th:field="*{state}" id="state" class="form-control" placeholder="State" required>
+				    <span th:if="${#fields.hasErrors('state')}" th:errors="*{state}"></span>
+				</div>
+				<div class="form-group col-md-2">
+					<label for="zipCode">ZipCode</label>
+				    <input type="number" th:field="*{zipCode}" id="zipCode" class="form-control" placeholder="ZipCode" required>
+				    <span th:if="${#fields.hasErrors('zipCode')}" th:errors="*{zipCode}"></span>
+				</div>
+			</div>
+			
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="phoneNumber">Phone</label>
+				    <input type="text" th:field="*{phoneNumber}" id="phoneNumber" class="form-control" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-234-4567" maxlength="12" required>
+				    <span th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></span>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="cellPhone">Cell Phone</label>
+				    <input type="text" th:field="*{cellPhone}" id="cellPhone" class="form-control" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="123-234-4567" maxlength="12">
+				    <span th:if="${#fields.hasErrors('cellPhone')}" th:errors="*{cellPhone}"></span>
+				</div>
+			</div>
+			
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="checkbox" id="isMeetAllReq" name="isMeetAllReq" th:field="*{isMeetAllReq}">
+				<label class="form-check-label" for="isMeetAllReq">Meets All Requirements?</label><br>
+			</div>
+			
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="checkbox" id="isProvEmpCheck" name="isProvEmpCheck" th:field="*{isProvEmpCheck}">
+				<label class="form-check-label" for="isProvEmpCheck">Proved Emp Check?</label><br>
+			</div>
+			
+			<div class="form-check form-check-inline">
+				<input class="form-check-input"type="checkbox" id="isActive" name="isActive" th:field="*{isActive}">
+				<label class="form-check-label" for="isActive">Currently Active?</label><br>
+			</div>    	
+		</div>
+		<div th:fragment="group">
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="groupName">Group Name</label>
+					<input type="text" th:field="*{groupName}" class="form-control" id="groupName" name="groupName" placeholder="Group 1" required>
+					<span th:if="${#fields.hasErrors('groupId')}" th:errors="*{groupId}"></span>
+				</div>
+				<div class="form-group col-md-6">
+					<label for="groupCode">Group Code</label>
+					<input type="text" th:field="*{groupCode}" class="form-control" id="groupCode" name="groupCode" placeholder="abc-123" required>
+					<span th:if="${#fields.hasErrors('groupName')}" th:errors="groupName"></span>
+				</div>
+			</div>
+		    
+		    <div class="form-group">
+		    	<label for="groupDescription">Group Description</label>
+		    	<input type="text" th:field="*{groupDescription}" class="form-control" id="groupDescription" name="groupDescription" placeholder="This group is ..." required>
+				<span th:if="${#fields.hasErrors('groupDescription')}" th:errors="groupDescription"></span>
+			</div>
+			
+			<div class="form-group" >
+				<label for="selectSchool">Choose Schools</label>
+				<div class="list-group" id="schooList">
+				  <label class="list-group-item" th:each="school : ${schools}">
+				  		<input class="form-check-input me-1" name="selectSchools" type="checkbox" th:value="${school.id}">
+				   		[[${school.schoolName}]]
+				  </label>
+				</div>
+			</div>
+		</div>
+    </body>
+</html>
